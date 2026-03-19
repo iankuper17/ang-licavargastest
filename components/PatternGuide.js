@@ -70,31 +70,6 @@ export default function PatternGuide() {
                 </p>
               </div>
 
-              {/* Cómo arrancar la conversación */}
-              <div
-                className="rounded-btn p-4"
-                style={{ backgroundColor: "rgba(37,211,102,0.06)", borderLeft: "3px solid #25D366" }}
-              >
-                <h4 className="text-sm font-semibold text-text-secondary mb-2">
-                  💬 Cómo arrancar la conversación
-                </h4>
-                <p className="text-[14px] leading-relaxed text-text-secondary">
-                  {pattern.conversationStarter}
-                </p>
-              </div>
-
-              {/* Tener en cuenta */}
-              <div
-                className="rounded-btn p-4"
-                style={{ backgroundColor: "rgba(196,91,74,0.06)", borderLeft: "3px solid #C45B4A" }}
-              >
-                <h4 className="text-sm font-semibold text-text-secondary mb-2">
-                  ⚠️ Tener en cuenta
-                </h4>
-                <p className="text-[14px] leading-relaxed text-text-secondary">
-                  {pattern.redFlags}
-                </p>
-              </div>
             </div>
           </div>
         ))}
