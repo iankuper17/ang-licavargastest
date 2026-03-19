@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Diagnóstico de Patrones — Angélica Vargas
 
-## Getting Started
+Lead magnet interactivo: cuestionario de 12 preguntas que identifica cuál de 4 patrones emocionales domina la vida de la persona. Incluye panel admin para ver resultados.
 
-First, run the development server:
+## Setup
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### 1. Supabase
+
+1. Crear cuenta en [supabase.com](https://supabase.com) → nuevo proyecto
+2. Ir a **SQL Editor** → ejecutar:
+
+```sql
+CREATE TABLE diagnosticos (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  nombre TEXT NOT NULL,
+  email TEXT NOT NULL,
+  telefono TEXT,
+  patron_dominante TEXT NOT NULL,
+  puntaje_espejo INTEGER DEFAULT 0,
+  puntaje_niebla INTEGER DEFAULT 0,
+  puntaje_peso INTEGER DEFAULT 0,
+  puntaje_laberinto INTEGER DEFAULT 0,
+  respuestas JSONB NOT NULL,
+  click_whatsapp BOOLEAN DEFAULT FALSE
+);
+
+CREATE INDEX idx_patron ON diagnosticos(patron_dominante);
+
+ALTER TABLE diagnosticos ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow anonymous inserts" ON diagnosticos
+  FOR INSERT TO anon WITH CHECK (true);
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Ir a **Settings > API** → copiar: Project URL, anon key, service_role key
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### 2. Variables de entorno
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Crear `.env.local` en la raíz:
 
-## Learn More
+```
+NEXT_PUBLIC_SUPABASE_URL=tu_url_de_supabase
+NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_anon_key
+SUPABASE_SERVICE_ROLE_KEY=tu_service_role_key
+ADMIN_PASSWORD=angelica2026
+NEXT_PUBLIC_WHATSAPP_NUMBER=50600000000
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Desarrollo local
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm install
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### 4. Deploy a Vercel
 
-## Deploy on Vercel
+1. Subir el repo a GitHub
+2. Ir a [vercel.com](https://vercel.com) → importar el repo
+3. Agregar las variables de entorno del paso 2
+4. Deploy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 5. Dominio (opcional)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+En Vercel > Settings > Domains → agregar `diagnostico.angelicavargas.com`
+
+## URLs
+
+- **Diagnóstico público:** `/`
+- **Panel admin:** `/admin` (contraseña: la definida en `ADMIN_PASSWORD`)
