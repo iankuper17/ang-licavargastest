@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 
 export const dynamic = "force-dynamic";
 
-// POST: Save a new diagnostic (public, uses anon key via RLS)
+// POST: Save a new diagnostic (server-side, uses service role key to bypass RLS)
 export async function POST(request) {
   try {
     const body = await request.json();
@@ -15,7 +15,7 @@ export async function POST(request) {
 
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      process.env.SUPABASE_SERVICE_ROLE_KEY
     );
 
     const { data, error } = await supabase.from("diagnosticos").insert([
