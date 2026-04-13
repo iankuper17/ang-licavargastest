@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
+export const dynamic = "force-dynamic";
+
 // POST: Save a new diagnostic (public, uses anon key via RLS)
 export async function POST(request) {
   try {
